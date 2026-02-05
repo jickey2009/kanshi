@@ -1,0 +1,184 @@
+#:kivy 2.1.0
+
+<MainLayout>:
+    DummyScreen:
+    MainScreen:
+    SearchScreen:
+    DetailScreen:
+    ExportScreen:
+
+<MainScreen@Screen>
+    name: 'main'
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: 0.1
+            Label:
+                text: '出力'
+                font_size: 20
+            Button:
+                text: '縦書き'
+                font_size: 20
+                on_press: root.show_string(True)
+            Button:
+                text: '横書き'
+                font_size: 20
+                on_press: root.show_string(False)
+        GridLayout:
+            id: kanji_layout
+            size_hint_y: 0.9
+            rows: 7
+            orientation: 'tb-lr'
+
+<SearchScreen@Screen>
+    name: 'search'
+    BoxLayout:
+        orientation:'vertical'
+        Button:
+            size_hint_y: 0.1
+            text: '戻る'
+            on_release: app.root.switch_to_main()
+        BoxLayout:
+            orientation:'horizontal'
+            size_hint_y: 0.1
+            CheckBox:
+                id: r_all
+                group: 'pz'
+                active: True
+            CheckBox:
+                id: r_ping
+                group: 'pz'
+                active: False
+            CheckBox:
+                id: r_ze
+                group: 'pz'
+                active: False
+        BoxLayout:
+            orientation:'horizontal'
+            size_hint_y: 0.1
+            Label:
+                text: '平仄'
+            Label:
+                text: '平'
+            Label:
+                text: '仄'
+        TabbedPanel:
+            tab_pos: 'top_left'
+            do_default_tab: False
+            size_hint_y: 0.4
+            TabbedPanelItem:
+                text:'読み仮名検索'
+                BoxLayout:
+                    orientation: 'vertical'
+                    TextInput:
+                        id: reading
+                        text: ''
+                        font_size: 15
+                        multiline: False
+                        size_hint_y: 0.1
+                    Button:
+                        id: search_by_reading
+                        size_hint_y: 0.1
+                        text: '検索'
+                        on_release:root.get_result_by_reading(reading.text)
+            TabbedPanelItem:
+                text: '部首検索'
+                ScrollView:
+                    GridLayout:
+                        id: radicals
+                        cols: 10
+                        size_hint_y: None
+                        row_default_height: 40
+                        height: self.minimum_height
+            TabbedPanelItem:
+                text: '韻目検索'
+                ScrollView:
+                    GridLayout:
+                        id: rhymes
+                        cols: 5
+                        size_hint_y: None
+                        row_default_height: 40
+                        height: self.minimum_height
+            TabbedPanelItem:
+                text:'漢字直接入力'
+                BoxLayout:
+                    orientation: 'vertical'
+                    TextInput:
+                        id: direct
+                        text: ''
+                        font_size: 15
+                        multiline: False
+                        size_hint_y: 0.1
+                    Button:
+                        id: search_by_reading
+                        size_hint_y: 0.1
+                        text: '検索'
+                        on_release:root.get_result_by_kanji(direct.text)                        
+
+
+        ScrollView:
+            GridLayout:
+                id: result_reading
+                size_hint_y: None
+                row_default_height: 40
+                height: self.minimum_height
+                cols: 10
+                
+
+<DetailScreen@Screen>
+    name: 'detail'
+    BoxLayout:
+        orientation: 'vertical'
+        Button:
+            text: '検索画面へ戻る'
+            on_release: app.root.switch_to_search('right')
+        Button:
+            id: kanji_char
+            text: 'Under construction!'
+            font_size: 80
+            on_release: root.send_kanji_to_main()
+        Label:
+            id: kanji_rhyme
+            text: ''
+            font_size:20
+        Label:
+            id: kanji_onyomi
+            text: ''
+            font_size: 20
+        Label:
+            id: kanji_kunyomi
+            text: ''
+            font_size: 20
+
+<ExportScreen@Screen>
+    name:'export'
+    BoxLayout:
+        orientation: 'vertical'
+        TextInput:
+            id: export
+            text: ''
+            font_size: 30
+            size_hint_y: 0.9
+        Button:
+            text: '戻る'
+            font_size: 20
+            size_hint_y: 0.1
+            on_release: app.root.switch_to_main()
+
+
+<InputButton@Button>
+    text: ''
+    font_size: 50
+    on_release: root.input_kanji()
+
+<ResultButton@Button>
+    text: ''
+    font_size: 20
+    on_release: root.show_detail()
+
+<DummyScreen@Screen>
+    name:'dummy'
+    Button:
+        text: 'Start!'
+        on_press: app.root.start_main()
